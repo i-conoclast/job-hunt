@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자기소개서 - {{ job.company }} {{ job.role_title }}</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.8;
+            margin: 40px;
+            color: #333;
+            max-width: 800px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .content {
+            text-align: justify;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .signature {
+            text-align: right;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+        .job-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>{{ job.company }} {{ job.role_title }} 지원 자기소개서</h2>
+        <p>{{ generated_at }}</p>
+    </div>
+
+    <div class="job-info">
+        <strong>지원 기업:</strong> {{ job.company }}<br>
+        <strong>지원 직무:</strong> {{ job.role_title }}<br>
+        <strong>주요 요구사항:</strong> {{ key_requirements | join(', ') }}
+    </div>
+
+    <div class="content">
+        <p>안녕하세요. {{ job.company }}의 {{ job.role_title }} 포지션에 지원하는 김지원입니다.</p>
+
+        <p>{{ job.company }}에서 요구하시는 <span class="highlight">{{ key_requirements[0] if key_requirements else 'AI/ML' }}</span> 역량과 관련하여,
+        {% if snippets %}
+        {{ snippets[0].one_liner_ko }} 경험을 보유하고 있습니다.
+        {{ snippets[0].bullets_ko[0] if snippets[0].bullets_ko else '' }}
+        {% endif %}
+        </p>
+
+        {% if snippets|length > 1 %}
+        <p>또한 {{ snippets[1].title }} 프로젝트를 통해 {{ snippets[1].one_liner_ko }}를 달성했습니다.
+        이러한 경험을 바탕으로 {{ job.company }}의 {{ job.role_title }} 업무에 즉시 기여할 수 있을 것으로 확신합니다.</p>
+        {% endif %}
+
+        <p>특히 {{ job.company }}의
+        {% if 'fintech' in job.domain %}
+        핀테크 분야에서의 혁신
+        {% elif 'healthcare' in job.domain %}
+        헬스케어 분야에서의 기술 혁신
+        {% elif 'education' in job.domain %}
+        교육 기술 분야에서의 발전
+        {% else %}
+        기술 혁신
+        {% endif %}
+        에 깊은 관심을 가지고 있으며, 제가 가진 RAG 및 LLM 전문성을 활용하여 실질적인 비즈니스 가치를 창출하고 싶습니다.</p>
+
+        <p>{% if talking_points %}
+        핵심 강점:
+        <ul>
+            {% for point in talking_points %}
+            <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}</p>
+
+        <p>{{ job.company }}의 팀원으로서 함께 성장하며 기여할 수 있는 기회를 주신다면, 최선을 다해 기대에 부응하겠습니다.
+        면접 기회를 주시면 더 자세한 경험과 비전을 말씀드리겠습니다.</p>
+
+        <p>감사합니다.</p>
+    </div>
+
+    <div class="signature">
+        김지원<br>
+        📧 example@email.com<br>
+        📱 010-0000-0000
+    </div>
+</body>
+</html>
