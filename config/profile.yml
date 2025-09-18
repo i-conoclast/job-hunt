@@ -1,0 +1,75 @@
+# User profile configuration
+
+personal_info:
+  name: "김지원"
+  email: "example@email.com"
+  phone: "010-0000-0000"
+  linkedin: "https://linkedin.com/in/example"
+  github: "https://github.com/example"
+  portfolio: "https://portfolio.example.com"
+
+preferences:
+  # Work arrangement
+  work_type: "hybrid"
+
+  # Location preferences (in order)
+  locations:
+    - "Seoul"
+    - "Pangyo"
+    - "Remote"
+
+  # Salary expectations
+  salary_min: 0  # Set 0 if flexible
+  salary_currency: "KRW"
+
+  # Industry preferences
+  domains:
+    - "fintech"
+    - "healthcare"
+    - "education"
+    - "ai/ml"
+
+career:
+  # Current level
+  seniority: "mid"
+
+  # Years of experience
+  experience_years: 3
+
+  # Current role
+  current_role: "AI Engineer"
+
+  # Target roles
+  target_roles:
+    - "AI Engineer"
+    - "ML Engineer"
+    - "RAG Engineer"
+    - "LLM Engineer"
+
+skills:
+  # Core technical skills
+  core:
+    - "Python"
+    - "PyTorch"
+    - "LLM"
+    - "RAG"
+    - "Machine Learning"
+
+  # Secondary skills
+  secondary:
+    - "FastAPI"
+    - "LangChain"
+    - "LlamaIndex"
+    - "AWS"
+    - "Docker"
+    - "PostgreSQL"
+
+  # Soft skills
+  soft:
+    - "Problem Solving"
+    - "Communication"
+    - "Team Collaboration"
+
+languages:
+  korean: "native"
+  english: "business"

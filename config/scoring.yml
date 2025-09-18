@@ -1,0 +1,76 @@
+# Scoring configuration for job prioritization
+
+weights:
+  must_match: 60        # Core skill matching
+  seniority: 10         # Seniority level fit
+  domain: 10            # Domain/industry fit
+  work_type: 8          # Work type preference
+  recency: 5            # Job posting recency
+  language: 7           # Language requirements
+
+penalties:
+  red_flag: -10         # Red flag penalty per flag
+
+thresholds:
+  shortlist: 75         # Auto-shortlist threshold
+  consider: 60          # Consider threshold
+
+# User profile for scoring
+user_profile:
+  # Core technical skills (required)
+  required_skills:
+    - "python"
+    - "llm"
+    - "rag"
+    - "machine learning"
+    - "pytorch"
+
+  # Nice-to-have skills
+  preferred_skills:
+    - "fastapi"
+    - "langchain"
+    - "llamaindex"
+    - "aws"
+    - "azure"
+    - "docker"
+    - "kubernetes"
+    - "mlflow"
+    - "postgresql"
+
+  # Experience level
+  seniority_level: "mid"
+
+  # Preferred domains
+  preferred_domains:
+    - "fintech"
+    - "healthcare"
+    - "education"
+    - "ecommerce"
+
+  # Work arrangement preference
+  work_type_preference: "hybrid"
+
+  # Location preferences
+  location_preference:
+    - "Seoul"
+    - "Pangyo"
+    - "Remote"
+
+  # Language capabilities
+  language_skills:
+    - "KR"
+    - "EN"
+
+# Tech stack synonyms for better matching
+tech_synonyms:
+  llm:
+    - "large language model"
+    - "생성AI"
+    - "generative ai"
+  rag:
+    - "retrieval augmented generation"
+    - "검색증강생성"
+  ml:
+    - "machine learning"
+    - "머신러닝"
+    - "기계학습"
