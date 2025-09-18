@@ -1,0 +1,99 @@
+# Experience snippets for application generation
+
+- id: taxlaw_rag
+  title: "NTS Tax-Law RAG Callbot"
+  one_liner_ko: "법령 RAG로 근거제공률 40% 향상"
+  one_liner_en: "Enhanced legal compliance with 40% better evidence provision using RAG"
+  impact_metrics:
+    - "근거 제공률 +40%"
+    - "검증 통과율 95%"
+    - "응답 시간 2초 이내"
+  tags: ["LLM", "RAG", "GraphDB", "PGVector", "LangChain", "Evaluation", "FastAPI", "Azure"]
+  bullets_ko:
+    - "AGE(GraphDB)로 법령 관계 그래프 구축, RAG 소스 신뢰도 향상"
+    - "청크/버전·효력기간 필터링으로 Citation 포맷 일관화"
+    - "LlamaIndex/LangChain 최적화로 지연시간 감소, 정확도 향상"
+    - "평가 파이프라인 구축으로 모델 성능 지속 모니터링"
+  bullets_en:
+    - "Built legal relationship graph using AGE(GraphDB) to improve RAG source reliability"
+    - "Implemented chunk/version filtering for consistent citation formatting"
+    - "Optimized LlamaIndex/LangChain pipeline for reduced latency and improved accuracy"
+    - "Established evaluation pipeline for continuous model performance monitoring"
+
+- id: medical_ocr
+  title: "Medical OCR Claims Processing"
+  one_liner_ko: "OCR 라인아이템 정확도로 수정율 5→0 달성"
+  one_liner_en: "Achieved zero correction rate with improved OCR line-item accuracy"
+  impact_metrics:
+    - "수정율 5건 → 0건"
+    - "처리 시간 50% 단축"
+    - "인력 비용 30% 절감"
+  tags: ["OCR", "Computer Vision", "FastAPI", "PostgreSQL", "Docker", "Preprocessing"]
+  bullets_ko:
+    - "의료 청구서 OCR 전처리 파이프라인으로 인식 정확도 향상"
+    - "라인 아이템 검증 로직 구현으로 후처리 오류 최소화"
+    - "실시간 배치 처리 시스템으로 대용량 문서 처리 자동화"
+  bullets_en:
+    - "Improved recognition accuracy with medical invoice OCR preprocessing pipeline"
+    - "Minimized post-processing errors with line-item validation logic"
+    - "Automated high-volume document processing with real-time batch system"
+
+- id: recommendation_system
+  title: "Job Recommendation Engine"
+  one_liner_ko: "Two-Tower 모델로 매칭 정확도 25% 향상"
+  one_liner_en: "Enhanced matching accuracy by 25% with Two-Tower model architecture"
+  impact_metrics:
+    - "매칭 정확도 +25%"
+    - "사용자 만족도 4.2/5.0"
+    - "추천 다양성 +15%"
+  tags: ["PyTorch", "Two-Tower", "Embeddings", "MLflow", "Recommendation", "Graph", "Redis"]
+  bullets_ko:
+    - "사용자-채용공고 Two-Tower 아키텍처로 확장 가능한 추천 시스템 구축"
+    - "그래프 기반 협업 필터링으로 콜드 스타트 문제 해결"
+    - "MLflow 실험 추적으로 A/B 테스팅 및 모델 버전 관리"
+    - "Redis 캐싱으로 실시간 추천 응답 시간 50ms 이내 달성"
+  bullets_en:
+    - "Built scalable recommendation system with user-job Two-Tower architecture"
+    - "Solved cold-start problem using graph-based collaborative filtering"
+    - "Implemented A/B testing and model versioning with MLflow experiment tracking"
+    - "Achieved sub-50ms real-time recommendation response with Redis caching"
+
+- id: llm_finetuning
+  title: "Domain-Specific LLM Fine-tuning"
+  one_liner_ko: "도메인 특화 LLM 파인튜닝으로 업무 정확도 60% 향상"
+  one_liner_en: "Improved task accuracy by 60% with domain-specific LLM fine-tuning"
+  impact_metrics:
+    - "업무 정확도 +60%"
+    - "추론 시간 30% 단축"
+    - "GPU 비용 40% 절감"
+  tags: ["LLM", "Fine-tuning", "PEFT", "LoRA", "FSDP", "Distributed Training", "HuggingFace"]
+  bullets_ko:
+    - "PEFT/LoRA 기법으로 메모리 효율적인 모델 파인튜닝 파이프라인 구축"
+    - "FSDP 분산 학습으로 대용량 모델 학습 시간 50% 단축"
+    - "도메인 특화 데이터셋 구축 및 품질 관리 프로세스 수립"
+    - "추론 최적화로 실서비스 배포 시 응답 시간 개선"
+  bullets_en:
+    - "Built memory-efficient fine-tuning pipeline using PEFT/LoRA techniques"
+    - "Reduced large model training time by 50% with FSDP distributed training"
+    - "Established domain-specific dataset construction and quality management process"
+    - "Improved response time for production deployment through inference optimization"
+
+- id: data_pipeline
+  title: "Real-time Data Processing Pipeline"
+  one_liner_ko: "실시간 데이터 파이프라인으로 지연시간 90% 단축"
+  one_liner_en: "Reduced latency by 90% with real-time data processing pipeline"
+  impact_metrics:
+    - "지연시간 90% 단축"
+    - "처리량 10배 증가"
+    - "시스템 안정성 99.9%"
+  tags: ["Apache Kafka", "Stream Processing", "PostgreSQL", "Redis", "Docker", "Kubernetes"]
+  bullets_ko:
+    - "Apache Kafka 스트림 처리로 실시간 데이터 수집·변환 파이프라인 구축"
+    - "마이크로서비스 아키텍처로 확장성과 장애 격리 보장"
+    - "Kubernetes 오케스트레이션으로 자동 스케일링 및 무중단 배포"
+    - "모니터링 대시보드 구축으로 시스템 상태 실시간 추적"
+  bullets_en:
+    - "Built real-time data collection and transformation pipeline with Apache Kafka streaming"
+    - "Ensured scalability and fault isolation with microservices architecture"
+    - "Implemented auto-scaling and zero-downtime deployment with Kubernetes orchestration"
+    - "Established monitoring dashboard for real-time system health tracking"
