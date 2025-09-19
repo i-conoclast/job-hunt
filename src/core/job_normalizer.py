@@ -56,6 +56,8 @@ class JobNormalizer:
         "혼합": "hybrid",
         "출근": "onsite",
         "사무실": "onsite",
+        "정규직": "onsite",  # 정규직은 기본적으로 출근
+        "계약직": "onsite",
         "remote": "remote",
         "hybrid": "hybrid",
         "onsite": "onsite"
@@ -66,7 +68,13 @@ class JobNormalizer:
         "fastapi", "django", "flask", "react", "vue", "javascript", "typescript",
         "aws", "azure", "gcp", "docker", "kubernetes", "mlflow", "airflow",
         "postgresql", "mongodb", "redis", "elasticsearch", "kafka",
-        "rag", "llm", "transformer", "bert", "gpt", "langchain", "llamaindex"
+        "rag", "llm", "transformer", "bert", "gpt", "langchain", "llamaindex",
+        # 더 많은 기술 스택 추가
+        "java", "kotlin", "spring", "springboot", "nodejs", "node.js", "express",
+        "mysql", "oracle", "sqlite", "git", "github", "gitlab", "jenkins",
+        "ios", "android", "swift", "react native", "flutter", "figma",
+        "ai", "ml", "machine learning", "deep learning", "data science",
+        "restful", "api", "microservice", "msa", "devops", "ci/cd"
     ]
 
     RED_FLAG_KEYWORDS = [
@@ -78,6 +86,28 @@ class JobNormalizer:
         """Convert raw job data to normalized format."""
         job_id = self._generate_job_id(raw_job)
 
+        # Get description and requirements text
+        description = raw_job.get("description", "")
+        requirements_text = ""
+
+        # Extract requirements from Wanted API format
+        if "requirements" in raw_job and raw_job["requirements"]:
+            if isinstance(raw_job["requirements"], list) and raw_job["requirements"]:
+                if isinstance(raw_job["requirements"][0], list):
+                    requirements_text = " ".join(raw_job["requirements"][0])
+                else:
+                    requirements_text = " ".join(raw_job["requirements"])
+
+        # Combine description and requirements for analysis
+        full_text = f"{description} {requirements_text}"
+
+        # Extract tech stack from both original tech_stack and text analysis
+        original_tech_stack = raw_job.get("tech_stack", [])
+        extracted_tech_stack = self._extract_tech_stack(full_text)
+
+        # Combine and deduplicate tech stacks
+        combined_tech_stack = list(set(original_tech_stack + extracted_tech_stack))
+
         return NormalizedJob(
             job_id=job_id,
             source_url=raw_job.get("url", ""),
@@ -86,18 +116,18 @@ class JobNormalizer:
             role_title=self._clean_text(raw_job.get("title", "")),
             location=self._normalize_location(raw_job.get("location", "")),
             work_type=self._normalize_work_type(raw_job.get("work_type", "")),
-            seniority=self._normalize_seniority(raw_job.get("experience", "")),
+            seniority=self._normalize_seniority(raw_job.get("experience", "") + " " + raw_job.get("title", "")),
             salary_range=self._normalize_salary(raw_job.get("salary", "")),
             posted_at=self._parse_date(raw_job.get("posted_at")),
             expires_at=self._parse_date(raw_job.get("expires_at")),
             recency_days=self._calculate_recency(raw_job.get("posted_at")),
-            requirements_must=self._extract_requirements(raw_job.get("description", ""), required=True),
-            requirements_nice=self._extract_requirements(raw_job.get("description", ""), required=False),
-            responsibilities=self._extract_responsibilities(raw_job.get("description", "")),
-            tech_stack=self._extract_tech_stack(raw_job.get("description", "")),
-            domain=self._extract_domain(raw_job.get("company", ""), raw_job.get("description", "")),
-            languages=self._extract_languages(raw_job.get("description", "")),
-            red_flags=self._extract_red_flags(raw_job.get("description", "")),
+            requirements_must=self._extract_requirements_from_text(requirements_text, required=True),
+            requirements_nice=self._extract_requirements_from_text(requirements_text, required=False),
+            responsibilities=self._extract_responsibilities(description),
+            tech_stack=combined_tech_stack,
+            domain=self._extract_domain(raw_job.get("company", ""), full_text),
+            languages=self._extract_languages(full_text),
+            red_flags=self._extract_red_flags(full_text),
             notes=""
         )
 
@@ -208,6 +238,49 @@ class JobNormalizer:
                 requirements.extend(lines)
 
         return requirements[:5]  # Limit to 5 most relevant
+
+    def _extract_requirements_from_text(self, requirements_text: str, required: bool = True) -> List[str]:
+        """Extract requirements from dedicated requirements text."""
+        if not requirements_text:
+            return []
+
+        requirements = []
+
+        # Split by common separators and clean up
+        lines = requirements_text.replace("•", "\n").replace("*", "\n").split("\n")
+
+        current_section = ""
+        in_required_section = False
+        in_preferred_section = False
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+
+            # Detect section headers
+            if any(keyword in line.lower() for keyword in ["자격 요건", "필수", "required", "qualifications"]):
+                in_required_section = True
+                in_preferred_section = False
+                current_section = "required"
+                continue
+            elif any(keyword in line.lower() for keyword in ["우대", "preferred", "nice to have", "plus"]):
+                in_required_section = False
+                in_preferred_section = True
+                current_section = "preferred"
+                continue
+            elif any(keyword in line.lower() for keyword in ["기타", "other", "혜택", "복지"]):
+                break  # Stop at other sections
+
+            # Extract requirements based on current section
+            if required and (in_required_section or (current_section == "" and not in_preferred_section)):
+                if any(tech in line.lower() for tech in ["경력", "경험", "년", "이상", "개발", "프로그래밍"]):
+                    requirements.append(line)
+            elif not required and in_preferred_section:
+                if any(tech in line.lower() for tech in ["경력", "경험", "년", "이상", "개발", "프로그래밍"]):
+                    requirements.append(line)
+
+        return requirements[:5]
 
     def _extract_responsibilities(self, description: str) -> List[str]:
         """Extract job responsibilities."""
