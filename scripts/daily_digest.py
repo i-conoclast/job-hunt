@@ -165,7 +165,8 @@ def main() -> None:
     if not args.skip_email:
         success = send_email(jobs, stats)
         if not success:
-            print("Email send failed (non-fatal)")
+            print("Email send failed")
+            sys.exit(1)
 
     print(f"\n=== Done: {stats['shortlist']} shortlist, "
           f"{stats['consider']} consider out of {stats['collected']} ===\n")
