@@ -12,35 +12,25 @@ from dataclasses import dataclass, asdict
 import hashlib
 
 from sqlalchemy import create_engine, Column, String, Integer, Float, DateTime, Text, JSON, UniqueConstraint, Index
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from sqlalchemy.sql import func
 import uuid
 
-# Use JSON instead of JSONB for SQLite compatibility
-try:
-    from sqlalchemy.dialects.postgresql import JSONB
-except ImportError:
-    JSONB = JSON
-
-# Handle ARRAY type for SQLite
-try:
-    from sqlalchemy.dialects.postgresql import ARRAY
-except ImportError:
-    from sqlalchemy import Text as ARRAY
-
 Base = declarative_base()
+
+
+def _new_uuid() -> str:
+    return str(uuid.uuid4())
 
 
 class JobPosting(Base):
     """Job posting model with vector embeddings"""
     __tablename__ = 'job_postings'
-    
+
     # Primary identifiers
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=_new_uuid)
     source = Column(String(50), nullable=False)  # wanted, saramin, jobkorea
-    source_method = Column(String(20), nullable=False)  # api, scraping, rss
+    source_method = Column(String(20), nullable=False, default="api")
     external_id = Column(String(255), nullable=False)
     
     # Basic information
@@ -161,7 +151,9 @@ class JobData:
     
     def to_db_model(self) -> JobPosting:
         """Convert to database model"""
-        job = JobPosting(**asdict(self))
+        data = asdict(self)
+        data.setdefault("source_method", "api")
+        job = JobPosting(**data)
         job.content_hash = job.calculate_content_hash()
         return job
 
@@ -358,9 +350,9 @@ class DatabaseManager:
                     job_dicts = []
                     for job in new_jobs:
                         job_dict = {c.name: getattr(job, c.name) for c in job.__table__.columns}
-                        # Ensure we have UUIDs
+                        # Ensure we have IDs
                         if job_dict['id'] is None:
-                            job_dict['id'] = uuid.uuid4()
+                            job_dict['id'] = str(uuid.uuid4())
                         job_dicts.append(job_dict)
                     
                     session.bulk_insert_mappings(JobPosting, job_dicts)
