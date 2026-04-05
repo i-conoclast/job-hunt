@@ -90,7 +90,7 @@ class MultiSourceScraper:
 
                 # Convert to standard format
                 converted_jobs = []
-                for job in raw_jobs[:limit]:  # Limit results
+                for job in raw_jobs:
                     converted_job = self._convert_wanted_job(job)
                     converted_jobs.append(converted_job)
 

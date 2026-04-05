@@ -27,11 +27,11 @@ from src.core.database import DatabaseManager, JobData
 from src.utils.email_sender import EmailSender
 
 
-def collect_jobs(keywords: list[str], limit: int = 50) -> list[dict]:
+def collect_jobs(keywords: list[str]) -> list[dict]:
     """Wanted API에서 공고 수집."""
-    print(f"Collecting jobs: keywords={keywords}, limit={limit}")
+    print(f"Collecting jobs: keywords={keywords}")
     scraper = MultiSourceScraper()
-    jobs = scraper.scrape_source("wanted", keywords=keywords, limit=limit)
+    jobs = scraper.scrape_source("wanted", keywords=keywords)
     print(f"  Collected {len(jobs)} jobs")
     return jobs
 
@@ -124,7 +124,7 @@ def main() -> None:
         default="LLM Engineer,RAG Engineer,ML Engineer,AI Engineer,NLP,MLOps",
         help="Comma-separated search keywords",
     )
-    parser.add_argument("--limit", "-l", type=int, default=50)
+    parser.add_argument("--limit", "-l", type=int, default=0, help="0=unlimited")
     parser.add_argument("--skip-email", action="store_true")
     parser.add_argument("--skip-db", action="store_true")
     args = parser.parse_args()
@@ -134,7 +134,7 @@ def main() -> None:
     print(f"\n=== Daily Job Digest ({datetime.now():%Y-%m-%d %H:%M}) ===\n")
 
     # 1. Collect
-    raw_jobs = collect_jobs(keywords, args.limit)
+    raw_jobs = collect_jobs(keywords)
     if not raw_jobs:
         print("No jobs collected. Exiting.")
         sys.exit(1)
