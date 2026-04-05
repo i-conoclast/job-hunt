@@ -46,62 +46,56 @@ class WantedAPIScraper:
         }
     
     def scrape_jobs(self, keywords: List[str] = None, include_details: bool = True) -> List[Dict]:
-        """Crawl jobs from Wanted API and return as dictionary list"""
+        """키워드별로 /api/v4/jobs 검색 API를 호출하여 공고를 수집한다."""
         if keywords is None:
-            keywords = ["AI", "머신러닝", "데이터사이언스", "Machine Learning"]
-        
-        jobs = []
-        page = 1
-        limit = 20
-        max_pages = 5  # Default max pages
-        
-        print(f"🔍 Starting Wanted API crawl (max {max_pages} pages)")
-        
-        while page <= max_pages:
+            keywords = ["LLM", "RAG", "AI Engineer", "ML Engineer", "AI Agent", "NLP"]
+
+        seen_ids: set[str] = set()
+        jobs: list[Dict] = []
+
+        print(f"🔍 Searching Wanted API for {len(keywords)} keywords")
+
+        for kw in keywords:
             try:
-                print(f"📄 Fetching page {page}...")
-                
-                # Get job list from API
                 params = {
-                    'job_group_id': 518,  # 개발 카테고리
-                    'job_group': 'develop',
+                    'query': kw,
                     'country': 'kr',
-                    'limit': limit,
-                    'offset': (page - 1) * limit,
-                    str(int(time.time())): '',  # Cache prevention
+                    'limit': 20,
+                    'offset': 0,
                 }
-                
-                response = requests.get(self.list_api, headers=self.headers, params=params)
+                response = requests.get(
+                    f"{self.base_url}/api/v4/jobs",
+                    headers=self.headers,
+                    params=params,
+                )
                 response.raise_for_status()
-                
                 api_jobs = response.json().get('data', [])
-                print(f"  Found {len(api_jobs)} jobs on page {page}")
-                
-                if not api_jobs:
-                    break
-                
-                # Process each job
+                new_count = 0
+
                 for api_job in api_jobs:
+                    job_id = str(api_job.get('id', ''))
+                    if not job_id or job_id in seen_ids:
+                        continue
+                    seen_ids.add(job_id)
+
                     try:
                         job = self._process_job(api_job)
-                        if job and self._matches_keywords(job, keywords):
+                        if job:
+                            job['search_keyword'] = kw
                             jobs.append(job)
+                            new_count += 1
                             print(f"  ✅ Added: {job['title']} at {job['company_name']}")
-                        
-                        # Rate limiting
-                        time.sleep(0.5)
-                        
+                        time.sleep(0.3)
                     except Exception as e:
-                        print(f"  ⚠️ Error processing job {api_job.get('id', 'unknown')}: {e}")
-                
-                page += 1
-                time.sleep(1)  # Rate limiting between pages
-                
+                        print(f"  ⚠️ Error processing job {job_id}: {e}")
+
+                print(f"  📌 query=\"{kw}\" → {len(api_jobs)}개 중 신규 {new_count}개")
+                time.sleep(0.5)
+
             except Exception as e:
-                print(f"❌ Error on page {page}: {e}")
-                break
-        
-        print(f"✅ Crawled {len(jobs)} jobs total")
+                print(f"  ❌ Error searching \"{kw}\": {e}")
+
+        print(f"✅ Total {len(jobs)} unique jobs collected")
         return jobs
     
     def _process_job(self, api_job: Dict) -> Optional[Dict]:
