@@ -122,7 +122,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Daily job digest pipeline")
     parser.add_argument(
         "--keywords", "-k",
-        default="AI,ML,RAG,LLM,LLM Engineer,RAG Engineer,ML Engineer",
+        default="LLM Engineer,RAG Engineer,ML Engineer,AI Engineer,NLP,MLOps",
         help="Comma-separated search keywords",
     )
     parser.add_argument("--limit", "-l", type=int, default=50)

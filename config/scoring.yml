@@ -1,84 +1,101 @@
 # Scoring configuration for job prioritization
+# 타겟: LLM/RAG Engineer (primary), ML Engineer (secondary)
 
 weights:
-  must_match: 40        # Core skill matching (더 관대하게)
-  seniority: 15         # Seniority level fit
-  domain: 15            # Domain/industry fit
-  work_type: 10         # Work type preference
-  recency: 10           # Job posting recency
-  language: 10          # Language requirements
+  must_match: 45        # 핵심 스킬 매칭 (가장 중요)
+  seniority: 15         # 시니어리티 적합도
+  domain: 10            # 도메인 적합도
+  work_type: 10         # 근무 형태
+  recency: 10           # 공고 최신성
+  language: 10          # 언어 요건
 
 penalties:
-  red_flag: -5          # Red flag penalty per flag (더 관대하게)
+  red_flag: -8          # 레드플래그 페널티
 
 thresholds:
-  shortlist: 60         # Auto-shortlist threshold (더 낮게)
-  consider: 45          # Consider threshold (더 낮게)
+  shortlist: 70         # 70+ = 즉시 지원
+  consider: 55          # 55-69 = 검토 후 지원
 
-# User profile for scoring
 user_profile:
-  # Core technical skills (required) - 더 포괄적으로
+  # 핵심 스킬 — JD에 이것들이 있어야 의미 있는 공고
   required_skills:
     - "python"
-    - "java"
-    - "javascript"
-    - "backend"
-    - "frontend"
-    - "web development"
-    - "api"
-    - "database"
-
-  # Nice-to-have skills - AI/ML 관련
-  preferred_skills:
     - "llm"
     - "rag"
     - "machine learning"
+    - "nlp"
+    - "deep learning"
+    - "ai"
+
+  # 우대 스킬 — 있으면 가산점
+  preferred_skills:
     - "pytorch"
-    - "tensorflow"
+    - "langchain"
+    - "langraph"
+    - "vector database"
+    - "embedding"
+    - "transformer"
     - "fastapi"
-    - "django"
-    - "spring"
-    - "react"
     - "aws"
     - "docker"
     - "kubernetes"
+    - "elasticsearch"
     - "postgresql"
-    - "mysql"
+    - "fine-tuning"
+    - "prompt engineering"
+    - "agent"
+    - "mlops"
 
-  # Experience level
-  seniority_level: "mid"
+  # 경력 수준: 5-7년 mid-senior
+  seniority_level: "senior"
 
-  # Preferred domains
+  # 선호 도메인
   preferred_domains:
     - "fintech"
     - "healthcare"
     - "education"
     - "ecommerce"
+    - "saas"
 
-  # Work arrangement preference
+  # 근무 형태
   work_type_preference: "hybrid"
 
-  # Location preferences
+  # 지역
   location_preference:
     - "Seoul"
     - "Pangyo"
     - "Remote"
 
-  # Language capabilities
+  # 언어
   language_skills:
     - "KR"
     - "EN"
 
-# Tech stack synonyms for better matching
+# 기술 동의어 — 매칭 정확도 향상
 tech_synonyms:
   llm:
     - "large language model"
     - "생성AI"
     - "generative ai"
+    - "gpt"
+    - "claude"
+    - "대규모 언어 모델"
   rag:
     - "retrieval augmented generation"
     - "검색증강생성"
+    - "retrieval"
   ml:
     - "machine learning"
     - "머신러닝"
     - "기계학습"
+  nlp:
+    - "natural language processing"
+    - "자연어처리"
+    - "자연어"
+  deep learning:
+    - "딥러닝"
+    - "심층학습"
+  embedding:
+    - "임베딩"
+    - "vector search"
+    - "벡터 검색"
