@@ -114,8 +114,7 @@ def save_json(jobs: list[NormalizedJob], raw_jobs: list[dict]) -> Path:
 def send_email(jobs: list[NormalizedJob], stats: dict) -> bool:
     """이메일 발송."""
     sender = EmailSender()
-    top_jobs = [j for j in jobs if j.status in ("shortlist", "consider")]
-    return sender.send_digest(top_jobs, stats)
+    return sender.send_digest(jobs, stats)
 
 
 def main() -> None:

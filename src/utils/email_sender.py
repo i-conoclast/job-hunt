@@ -80,7 +80,7 @@ class EmailSender:
     ) -> str:
         """HTML 이메일 본문 생성."""
         rows = []
-        for i, job in enumerate(jobs[:15], 1):
+        for i, job in enumerate(jobs, 1):
             status_color = (
                 "#22c55e" if job.status == "shortlist"
                 else "#eab308" if job.status == "consider"
