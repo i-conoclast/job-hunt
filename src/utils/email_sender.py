@@ -21,8 +21,8 @@ class EmailSender:
 
     def __init__(self) -> None:
         load_dotenv()
-        self.smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-        self.smtp_port = int(os.getenv("SMTP_PORT", "587"))
+        self.smtp_server = os.getenv("SMTP_SERVER") or "smtp.gmail.com"
+        self.smtp_port = int(os.getenv("SMTP_PORT") or "587")
         self.email_user = os.getenv("EMAIL_USER", "")
         self.email_password = os.getenv("EMAIL_PASSWORD", "")
         self.recipients = [
